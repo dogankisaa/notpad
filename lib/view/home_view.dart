@@ -14,30 +14,43 @@ class HomeView extends StatelessWidget {
     return Column(
       children: [
         Expanded(
-         
-          child: Obx(
-            ()=> DefaultTabController(
-                length: _controller.getList.length,
-                child: Scaffold(
-                  floatingActionButton: FloatingActionButtonWidget(),
-                  appBar: AppBar(
-                    bottom: TabBar(
-                   
-                        tabs: List.generate(
-                            _controller.getList.length,
-                            (index) =>
-                               Text(_controller.getList[index]))),
-                  ),
-                  body: TabBarView(
-                      children: List.generate(
-                          _controller.getList.length,
-                          (index) =>
-                              Text(_controller.getList[index]))),
-                ),
-              ),
-          ),
+          child: DynamicTabBarWidget(controller: _controller),
         )
       ],
+    );
+  }
+}
+
+class DynamicTabBarWidget extends StatelessWidget {
+  const DynamicTabBarWidget({
+    Key? key,
+    required HomeViewModel controller,
+  })  : _controller = controller,
+        super(key: key);
+
+  final HomeViewModel _controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () => DefaultTabController(
+        length: _controller.getList.length,
+        child: Scaffold(
+          floatingActionButton: FloatingActionButtonWidget(),
+          appBar: AppBar(
+            bottom: PreferredSize(
+              preferredSize: Size.zero,
+              child: TabBar(
+                isScrollable: true,
+                  tabs: List.generate(_controller.getList.length,
+                      (index) => Text(_controller.getList[index]))),
+            ),
+          ),
+          body: TabBarView(
+              children: List.generate(_controller.getList.length,
+                  (index) => Text(_controller.getList[index]))),
+        ),
+      ),
     );
   }
 }
@@ -52,7 +65,6 @@ class FloatingActionButtonWidget extends StatelessWidget {
     final HomeViewModel _controller = Get.put(HomeViewModel());
     return FloatingActionButton(
       onPressed: () {
-       
         _controller.addNewTab("tabName");
       },
       child: const Center(

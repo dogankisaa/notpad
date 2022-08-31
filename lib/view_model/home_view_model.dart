@@ -14,4 +14,6 @@ class HomeViewModel extends GetxController {
   void deletTab(int index) {
     tabList.value.removeAt(index);
   }
+
+
 }
