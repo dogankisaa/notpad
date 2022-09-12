@@ -1,10 +1,21 @@
+
+
 import 'package:flutter/material.dart';
+
 import 'package:notepad/core/theme/theme_data.dart';
 import 'package:notepad/view/home_view.dart';
+import 'package:notepad/view_model/home_view_model.dart';
+import 'package:provider/provider.dart';
 
+void main() async{
 
-void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<HomeViewModel>(create: (context) => HomeViewModel(),
+      ),
+    ],
+    builder:(context, child) => MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

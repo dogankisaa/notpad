@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+
 class HomeConstants{
-  String homeAppBarTitle = "asdasdasd";
+  String newNoteNameInputTitle = "Başlık";
+  String newNoteCreateButtonTitle = "Oluştur";
+  Color newNoteCreateButtonTitleColor = Colors.white;
 }

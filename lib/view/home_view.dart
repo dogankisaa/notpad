@@ -1,75 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:notepad/core/constants/general_constants.dart';
-import 'package:notepad/view_model/home_view_model.dart';
 
-import '../core/widgets/tab_bar_widget.dart';
+import 'package:notepad/core/constants/general_constants.dart';
+import 'package:notepad/core/constants/home_constants.dart';
+import 'package:notepad/view_model/home_view_model.dart';
+import 'package:provider/provider.dart';
+
+import '../core/widgets/new_note_bottom_sheet_body_widget.dart';
+import '../core/widgets/new_note_text_field.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final HomeViewModel _controller = Get.put(HomeViewModel());
-    return Column(
-      children: [
-        Expanded(
-          child: DynamicTabBarWidget(controller: _controller),
-        )
-      ],
+    late BuildContext _context;
+    late HomeViewModel _viewModel;
+    return ChangeNotifierProvider.value(
+      value: _viewModel = HomeViewModel(),
+      builder: ((context, child) {
+        _context = context;
+        return Scaffold(
+            floatingActionButton: addNoteButton(_context, _viewModel),
+            body: Text(_viewModel.getNoteList.toString()));
+      }),
     );
   }
-}
 
-class DynamicTabBarWidget extends StatelessWidget {
-  const DynamicTabBarWidget({
-    Key? key,
-    required HomeViewModel controller,
-  })  : _controller = controller,
-        super(key: key);
-
-  final HomeViewModel _controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Obx(
-      () => DefaultTabController(
-        length: _controller.getList.length,
-        child: Scaffold(
-          floatingActionButton: FloatingActionButtonWidget(),
-          appBar: AppBar(
-            bottom: PreferredSize(
-              preferredSize: Size.zero,
-              child: TabBar(
-                isScrollable: true,
-                  tabs: List.generate(_controller.getList.length,
-                      (index) => Text(_controller.getList[index]))),
-            ),
-          ),
-          body: TabBarView(
-              children: List.generate(_controller.getList.length,
-                  (index) => Text(_controller.getList[index]))),
-        ),
-      ),
-    );
-  }
-}
-
-class FloatingActionButtonWidget extends StatelessWidget {
-  const FloatingActionButtonWidget({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final HomeViewModel _controller = Get.put(HomeViewModel());
+  FloatingActionButton addNoteButton(
+      BuildContext _context, HomeViewModel _viewModel) {
     return FloatingActionButton(
       onPressed: () {
-        _controller.addNewTab("tabName");
+        _viewModel.showNewNoteInputs(
+            _context,
+            NewNoteBottomSheetBodyWidget());
+     
       },
       child: const Center(
         child: Icon(Icons.add),
       ),
     );
   }
+
+  Consumer noteListWidget() {
+    return Consumer<HomeViewModel>(
+      builder: (context, _viewModel, child) {
+        return Text(_viewModel.getNoteList.toString());
+      },
+    );
+  }
 }
+
+
