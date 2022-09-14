@@ -13,15 +13,16 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final noteDo = Provider.of<HomeViewModel>(context);
     late BuildContext _context;
-    late HomeViewModel _viewModel;
+    late HomeViewModel viewModel;
     return ChangeNotifierProvider.value(
-      value: _viewModel = HomeViewModel(),
+      value: viewModel = HomeViewModel(),
       builder: ((context, child) {
         _context = context;
         return Scaffold(
-            floatingActionButton: addNoteButton(_context, _viewModel),
-            body: Text(_viewModel.getNoteList.toString()));
+            floatingActionButton: addNoteButton(_context, viewModel),
+            body: Center(child: noteListWidget(noteDo.noteList)));
       }),
     );
   }
@@ -30,10 +31,7 @@ class HomeView extends StatelessWidget {
       BuildContext _context, HomeViewModel _viewModel) {
     return FloatingActionButton(
       onPressed: () {
-        _viewModel.showNewNoteInputs(
-            _context,
-            NewNoteBottomSheetBodyWidget());
-     
+        _viewModel.showNewNoteInputs(_context, NewNoteBottomSheetBodyWidget());
       },
       child: const Center(
         child: Icon(Icons.add),
@@ -41,13 +39,22 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Consumer noteListWidget() {
-    return Consumer<HomeViewModel>(
-      builder: (context, _viewModel, child) {
-        return Text(_viewModel.getNoteList.toString());
-      },
+  GridView noteListWidget(title) {
+    return GridView.count(
+      crossAxisCount: 2,
+      children: List.generate(
+          title.length,
+          (index) => Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Center(
+                    child: Text(title[index].toString()),
+                  ),
+                ),
+              )),
     );
   }
 }
-
-
