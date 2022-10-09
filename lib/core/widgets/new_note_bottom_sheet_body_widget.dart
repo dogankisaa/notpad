@@ -20,31 +20,30 @@ class NewNoteBottomSheetBodyWidget extends StatelessWidget {
           padding: GeneralConstants().generalPadding,
           child: Consumer<HomeViewModel>(
             builder: (context, _viewModel, child) => Column(
-            children: [
-              NewNoteTextFieldWidget(
-                label: HomeConstants().newNoteNameInputTitle,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      Theme.of(context).colorScheme.secondary),
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                NewNoteTextFieldWidget(
+                  label: HomeConstants().newNoteNameInputTitle,
                 ),
-                onPressed: () {
-                  _viewModel.addNewTab(context);
-                  
-                },
-                child: Text(
-                  HomeConstants().newNoteCreateButtonTitle,
-                  style: TextStyle(
-                      color:
-                          HomeConstants().newNoteCreateButtonTitleColor),
+                SizedBox(
+                  height: 20,
                 ),
-              )
-            ],
-          ),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        Theme.of(context).colorScheme.secondary),
+                  ),
+                  onPressed: () {
+                    _viewModel.addNewTab(context);
+                  },
+                  child: Text(
+                    HomeConstants().newNoteCreateButtonTitle,
+                    style: TextStyle(
+                        color: HomeConstants().newNoteCreateButtonTitleColor),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

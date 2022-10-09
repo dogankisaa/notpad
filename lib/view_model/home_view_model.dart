@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:notepad/view_model/base_view_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeViewModel extends BaseViewModel {
+  TextEditingController newNoteLabelController = TextEditingController();
+
+  final _todos = Hive.box("todos");
+
   List noteList = [];
   @override
   Future<void> init() async {
-    final prefs = await SharedPreferences.getInstance();
-    noteList.addAll([1,2,3]);
-     notifyListeners();
+    noteList = _todos.get("todos") ?? [];
+
+    notifyListeners();
   }
 
-  TextEditingController newNoteLabelController = TextEditingController();
-
   Future<void> addNewTab(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList('items', <String>[newNoteLabelController.text]);
-    noteList.add(prefs.getStringList("items"));
-    print(prefs.getStringList("items"));
-
+    noteList.add(newNoteLabelController.text);
+    _todos.put("todos", noteList);
+    print(_todos.get("todos"));
+    print(noteList);
     notifyListeners();
 
     Navigator.pop(context);
@@ -26,12 +27,8 @@ class HomeViewModel extends BaseViewModel {
 
   void deletTab(int index) {
     noteList.removeAt(index);
-  }
+    _todos.put("todos", noteList);
 
-  void showNewNoteInputs(BuildContext context, Widget noteInputs) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => noteInputs,
-    );
+    notifyListeners();
   }
 }

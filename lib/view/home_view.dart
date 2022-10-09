@@ -5,6 +5,8 @@ import 'package:notepad/core/constants/home_constants.dart';
 import 'package:notepad/view_model/home_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../core/helper/new_todo_bottom_sheet.dart';
+
 import '../core/widgets/new_note_bottom_sheet_body_widget.dart';
 import '../core/widgets/new_note_text_field.dart';
 
@@ -21,17 +23,18 @@ class HomeView extends StatelessWidget {
       builder: ((context, child) {
         _context = context;
         return Scaffold(
-            floatingActionButton: addNoteButton(_context, viewModel),
-            body: Center(child: noteListWidget(noteDo.noteList)));
+            floatingActionButton: addNoteButton(
+              _context,
+            ),
+            body: Center(child: noteListWidget(_context)));
       }),
     );
   }
 
-  FloatingActionButton addNoteButton(
-      BuildContext _context, HomeViewModel _viewModel) {
+  FloatingActionButton addNoteButton(BuildContext _context) {
     return FloatingActionButton(
       onPressed: () {
-        _viewModel.showNewNoteInputs(_context, NewNoteBottomSheetBodyWidget());
+        showNewNoteInputs(_context, NewNoteBottomSheetBodyWidget());
       },
       child: const Center(
         child: Icon(Icons.add),
@@ -39,19 +42,40 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  GridView noteListWidget(title) {
+  GridView noteListWidget(BuildContext _context) {
+    final noteDo = Provider.of<HomeViewModel>(_context);
     return GridView.count(
       crossAxisCount: 2,
       children: List.generate(
-          title.length,
-          (index) => Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Center(
-                    child: Text(title[index].toString()),
+          noteDo.noteList.length,
+          (index) => Consumer<HomeViewModel>(
+                builder: (context, _viewModel, child) => Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Expanded(
+                            child: Align(
+                                alignment: Alignment.topRight,
+                                child: IconButton(
+                                    icon: const Icon(Icons.close),
+                                    onPressed: () {
+                                      _viewModel.deletTab(index);
+                                    }))),
+                        Expanded(
+                          child: Center(
+                            child: Center(
+                              child:
+                                  Text(_viewModel.noteList[index].toString()),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               )),
