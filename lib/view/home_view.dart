@@ -47,7 +47,7 @@ class HomeView extends StatelessWidget {
     return GridView.count(
       crossAxisCount: 2,
       children: List.generate(
-          noteDo.noteList.length,
+          noteDo.titleList.length,
           (index) => Consumer<HomeViewModel>(
                 builder: (context, _viewModel, child) => Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -59,18 +59,22 @@ class HomeView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Expanded(
-                            child: Align(
-                                alignment: Alignment.topRight,
-                                child: IconButton(
-                                    icon: const Icon(Icons.close),
-                                    onPressed: () {
-                                      _viewModel.deletTab(index);
-                                    }))),
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(_viewModel.dateList[index]),
+                            IconButton(
+                                icon: const Icon(Icons.close),
+                                onPressed: () {
+                                  _viewModel.deletTab(index);
+                                })
+                          ],
+                        )),
                         Expanded(
                           child: Center(
                             child: Center(
                               child:
-                                  Text(_viewModel.noteList[index].toString()),
+                                  Text(_viewModel.titleList[index].toString()),
                             ),
                           ),
                         ),

@@ -4,30 +4,33 @@ import 'package:notepad/view_model/base_view_model.dart';
 
 class HomeViewModel extends BaseViewModel {
   TextEditingController newNoteLabelController = TextEditingController();
-
-  final _todos = Hive.box("todos");
-
-  List noteList = [];
+  DateTime now = DateTime.now();
+  final _title = Hive.box("title");
+  final _date = Hive.box("date");
+  List titleList = [];
+  List dateList = [];
   @override
   Future<void> init() async {
-    noteList = _todos.get("todos") ?? [];
-
+    titleList = _title.get("title") ?? [];
+    dateList = _date.get("date") ?? [];
     notifyListeners();
   }
 
   Future<void> addNewTab(BuildContext context) async {
-    noteList.add(newNoteLabelController.text);
-    _todos.put("todos", noteList);
-    print(_todos.get("todos"));
-    print(noteList);
+    titleList.add(newNoteLabelController.text);
+    dateList.add("${now.day} ${now.month} ${now.year}");
+    _title.put("title", titleList);
+    _date.put("date", dateList);
     notifyListeners();
 
     Navigator.pop(context);
   }
 
   void deletTab(int index) {
-    noteList.removeAt(index);
-    _todos.put("todos", noteList);
+    titleList.removeAt(index);
+    dateList.removeAt(index);
+    _title.deleteAt(index);
+    _date..deleteAt(index);
 
     notifyListeners();
   }
