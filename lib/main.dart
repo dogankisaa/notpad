@@ -8,8 +8,8 @@ import 'package:provider/provider.dart';
 
 void main() async {
   await Hive.initFlutter();
-  await Hive.openBox('title');
-  await Hive.openBox('date');
+  var box = await Hive.openBox('todos');
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<HomeViewModel>(

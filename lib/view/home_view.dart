@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:notepad/core/constants/general_constants.dart';
-import 'package:notepad/core/constants/home_constants.dart';
+
 import 'package:notepad/view_model/home_view_model.dart';
 import 'package:provider/provider.dart';
 

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:notepad/core/constants/home_constants/string.dart';
 import 'package:notepad/view_model/home_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/general_constants.dart';
-import '../constants/home_constants.dart';
+import '../constants/home_constants/colors.dart';
 import 'new_note_text_field.dart';
 
 class NewNoteBottomSheetBodyWidget extends StatelessWidget {
@@ -23,7 +24,7 @@ class NewNoteBottomSheetBodyWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 NewNoteTextFieldWidget(
-                  label: HomeConstants().newNoteNameInputTitle,
+                  label: HomeStringConstants().newNoteNameInputTitle,
                 ),
                 SizedBox(
                   height: 20,
@@ -37,9 +38,10 @@ class NewNoteBottomSheetBodyWidget extends StatelessWidget {
                     _viewModel.addNewTab(context);
                   },
                   child: Text(
-                    HomeConstants().newNoteCreateButtonTitle,
+                    HomeStringConstants().newNoteCreateButtonTitle,
                     style: TextStyle(
-                        color: HomeConstants().newNoteCreateButtonTitleColor),
+                        color:
+                            HomeColorConstants().newNoteCreateButtonTitleColor),
                   ),
                 )
               ],
