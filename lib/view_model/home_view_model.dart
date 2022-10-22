@@ -4,6 +4,7 @@ import 'package:notepad/view_model/base_view_model.dart';
 
 class HomeViewModel extends BaseViewModel {
   TextEditingController newNoteLabelController = TextEditingController();
+  TextEditingController searchNoteController = TextEditingController();
   DateTime now = DateTime.now();
   final _title = Hive.box("todos");
 
@@ -20,19 +21,29 @@ class HomeViewModel extends BaseViewModel {
   Future<void> addNewTab(BuildContext context) async {
     titleList.add(newNoteLabelController.text);
     dateList.add("${now.day} ${now.month} ${now.year}");
-    _title.put("title", titleList);
-    _title.put("date", dateList);
+    updateBox("title", titleList);
+    updateBox("date", dateList);
+
     notifyListeners();
 
     Navigator.pop(context);
   }
 
   void deletTab(int index) {
-    titleList.removeAt(index);
-    dateList.removeAt(index);
-    _title.put("title", titleList);
-    _title.put("date", dateList);
+    deleteCard(titleList, index);
+    deleteCard(dateList, index);
+
+    updateBox("title", titleList);
+    updateBox("date", dateList);
 
     notifyListeners();
+  }
+
+  deleteCard(list, index) {
+    list.removeAt(index);
+  }
+
+  updateBox(name, list) {
+    _title.put(name, list);
   }
 }
