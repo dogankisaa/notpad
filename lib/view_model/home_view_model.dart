@@ -10,6 +10,8 @@ class HomeViewModel extends BaseViewModel {
 
   List titleList = [];
   List dateList = [];
+  List searchedTitleList = [];
+  List searchedDateList = [];
   @override
   Future<void> init() async {
     titleList = _title.get("title") ?? [];
@@ -18,9 +20,23 @@ class HomeViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> addNewTab(BuildContext context) async {
-    titleList.add(newNoteLabelController.text);
-    dateList.add("${now.day} ${now.month} ${now.year}");
+  searchCard() {
+    searchNoteController.text.split(" ").forEach((word) {
+      searchedTitleList
+          .addAll(titleList.where((element) => element.contains(word)));
+      searchedTitleList = searchedTitleList.toSet().toList();
+      searchedDateList
+          .addAll(titleList.where((element) => element.contains(word)));
+      searchedDateList = searchedDateList.toSet().toList();
+    });
+    notifyListeners();
+    print(searchedDateList);
+    print(searchedTitleList);
+  }
+
+  addNewTab(BuildContext context) {
+    titleList.insert(0, newNoteLabelController.text);
+    dateList.insert(0, "${now.day} ${now.month} ${now.year}");
     updateBox("title", titleList);
     updateBox("date", dateList);
 

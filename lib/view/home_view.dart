@@ -37,7 +37,7 @@ class HomeView extends StatelessWidget {
                   const SizedBox(
                     height: 24,
                   ),
-                  searchTextField(_context),
+                  searchTextField(_context, viewModel),
                   const SizedBox(
                     height: 24,
                   ),
@@ -53,8 +53,10 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  TextFormField searchTextField(BuildContext context) {
+  TextFormField searchTextField(BuildContext context, HomeViewModel viewModel) {
     return TextFormField(
+      onEditingComplete: () => viewModel.searchCard(),
+      controller: viewModel.searchNoteController,
       decoration: InputDecoration(
         label: Text(
           HomeStringConstants().searchLabelTitle,
@@ -132,7 +134,9 @@ class HomeView extends StatelessWidget {
       mainAxisSpacing: 16,
       crossAxisCount: 2,
       children: List.generate(
-          noteDo.titleList.length,
+          noteDo.searchedTitleList.length == 0
+              ? noteDo.titleList.length
+              : noteDo.searchedTitleList.length,
           (index) => Consumer<HomeViewModel>(
               builder: (context, _viewModel, child) => Container(
                     decoration: BoxDecoration(
@@ -144,7 +148,9 @@ class HomeView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            _viewModel.dateList[index],
+                            _viewModel.searchedDateList.length == 0
+                                ? _viewModel.dateList[index].toString()
+                                : _viewModel.searchedDateList[index].toString(),
                             style: Theme.of(context)
                                 .textTheme
                                 .headline5!
@@ -163,7 +169,10 @@ class HomeView extends StatelessWidget {
                             height: 5,
                           ),
                           Text(
-                            _viewModel.titleList[index].toString(),
+                            _viewModel.searchedTitleList.length == 0
+                                ? _viewModel.titleList[index].toString()
+                                : _viewModel.searchedTitleList[index]
+                                    .toString(),
                             style: Theme.of(context)
                                 .textTheme
                                 .headline4!
