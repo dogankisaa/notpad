@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:notepad/core/theme/theme_data.dart';
 import 'package:notepad/view/home_view.dart';
+import 'package:notepad/view/reminder_view.dart';
 import 'package:notepad/view_model/home_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
     ));
     return MaterialApp(
       theme: themeData(),
-      home: const HomeView(),
+      home: const ReminderView(),
     );
   }
 }

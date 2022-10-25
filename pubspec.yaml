@@ -41,6 +41,7 @@ dependencies:
   hive: 2.2.3
   hive_flutter: 1.1.0
   flutter_svg: ^1.1.5
+  awesome_notifications: ^0.6.21
 
 
 dev_dependencies:
