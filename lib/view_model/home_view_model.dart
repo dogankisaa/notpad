@@ -1,5 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:notepad/core/route.gr.dart';
 import 'package:notepad/view_model/base_view_model.dart';
 
 class HomeViewModel extends BaseViewModel {
@@ -7,7 +9,7 @@ class HomeViewModel extends BaseViewModel {
   TextEditingController searchNoteController = TextEditingController();
   DateTime now = DateTime.now();
   final _title = Hive.box("todos");
-
+  int currentIndex = 0;
   List titleList = [];
   List dateList = [];
   List searchedTitleList = [];
@@ -61,5 +63,15 @@ class HomeViewModel extends BaseViewModel {
 
   updateBox(name, list) {
     _title.put(name, list);
+  }
+
+  routeCardView(BuildContext context, int index) {
+    currentIndex = index;
+    notifyListeners();
+    context.router.push(CardView(index: index));
+  }
+
+  showDescription(index) {
+    return _title.get(index);
   }
 }

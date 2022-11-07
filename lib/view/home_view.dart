@@ -127,79 +127,85 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  GridView noteListWidget(BuildContext context) {
+  InkWell noteListWidget(BuildContext context) {
     final noteDo = Provider.of<HomeViewModel>(context);
-    return GridView.count(
-      crossAxisSpacing: 16,
-      mainAxisSpacing: 16,
-      crossAxisCount: 2,
-      children: List.generate(
-          noteDo.searchedTitleList.length == 0
-              ? noteDo.titleList.length
-              : noteDo.searchedTitleList.length,
-          (index) => Consumer<HomeViewModel>(
-              builder: (context, _viewModel, child) => Container(
-                    decoration: BoxDecoration(
-                        color: HomeColorConstants().cardColor,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Padding(
-                      padding: GeneralConstants().cardTitlesPadding,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _viewModel.searchedDateList.length == 0
-                                ? _viewModel.dateList[index].toString()
-                                : _viewModel.searchedDateList[index].toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline5!
-                                .copyWith(
-                                    fontWeight: FontWeight.w400,
-                                    color: HomeColorConstants()
-                                        .cardDateTitleColor),
-                          ),
-                          /*  IconButton(
-                                icon: const Icon(Icons.close),
-                                onPressed: () {
-                                  _viewModel.deletTab(index);
-                                })*/
-
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            _viewModel.searchedTitleList.length == 0
-                                ? _viewModel.titleList[index].toString()
-                                : _viewModel.searchedTitleList[index]
-                                    .toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline4!
-                                .copyWith(
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.black),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Flexible(
-                            child: Text(
-                              "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline5!
-                                  .copyWith(
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.black,
-                                      overflow: TextOverflow.fade,
-                                      height: 1.25),
+    return InkWell(
+      onTap: () => noteDo.routeCardView(context, 31),
+      child: GridView.count(
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        crossAxisCount: 2,
+        children: List.generate(
+            noteDo.searchedTitleList.length == 0
+                ? noteDo.titleList.length
+                : noteDo.searchedTitleList.length,
+            (index) => InkWell(
+                  onTap: () => noteDo.routeCardView(context, index),
+                  child: Consumer<HomeViewModel>(
+                      builder: (context, _viewModel, child) => Container(
+                            decoration: BoxDecoration(
+                                color: HomeColorConstants().cardColor,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Padding(
+                              padding: GeneralConstants().cardTitlesPadding,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    _viewModel.searchedDateList.length == 0
+                                        ? _viewModel.dateList[index].toString()
+                                        : _viewModel.searchedDateList[index]
+                                            .toString(),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline5!
+                                        .copyWith(
+                                            fontWeight: FontWeight.w400,
+                                            color: HomeColorConstants()
+                                                .cardDateTitleColor),
+                                  ),
+                                  /*  IconButton(
+                                  icon: const Icon(Icons.close),
+                                  onPressed: () {
+                                    _viewModel.deletTab(index);
+                                  }),*/
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    _viewModel.searchedTitleList.length == 0
+                                        ? _viewModel.titleList[index].toString()
+                                        : _viewModel.searchedTitleList[index]
+                                            .toString(),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline4!
+                                        .copyWith(
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Flexible(
+                                    child: Text(
+                                      noteDo.showDescription(index),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline5!
+                                          .copyWith(
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.black,
+                                              overflow: TextOverflow.fade,
+                                              height: 1.25),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ))),
+                          )),
+                )),
+      ),
     );
   }
 }
