@@ -189,7 +189,7 @@ class HomeView extends StatelessWidget {
                                   ),
                                   Flexible(
                                     child: Text(
-                                      noteDo.showDescription(index),
+                                      noteDo.showDescription(index) ?? "",
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline5!

@@ -16,8 +16,8 @@ import '../core/constants/general_constants.dart';
 import '../view_model/home_view_model.dart';
 
 class CardView extends StatelessWidget {
-  final index;
-  const CardView({super.key, this.index});
+  final currentIndex;
+  const CardView({super.key, this.currentIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -30,19 +30,27 @@ class CardView extends StatelessWidget {
         _context = context;
         return Scaffold(
           appBar: customAppBar(),
-          body: Padding(
-            padding: GeneralConstants().generalPadding,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 30,
+          body: WillPopScope(
+            onWillPop: () {
+              viewModel.routeToHome(context);
+              return Future.value(false);
+            },
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: GeneralConstants().generalPadding,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 30,
+                    ),
+                    titleAndDateWidget(viewModel, context),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    descriptionWidget(context, viewModel, currentIndex),
+                  ],
                 ),
-                titleAndDateWidget(viewModel, context),
-                SizedBox(
-                  height: 10,
-                ),
-                descriptionWidget(context, viewModel, index),
-              ],
+              ),
             ),
           ),
         );
@@ -60,11 +68,34 @@ class CardView extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
-              viewModel.showDescription(index, context),
+              viewModel.isEditing
+                  ? TextFormField(
+                      autofocus: true,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: viewModel.getDescription(index),
+                      ),
+                      maxLines: null,
+                      controller: viewModel.descriptionController,
+                      onTap: () =>
+                          viewModel.descriptionController.text ==
+                          viewModel.getDescription(index),
+                      onEditingComplete: () {
+                        viewModel.onEditComplete(currentIndex);
+                      },
+                    )
+                  : Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        viewModel.getDescription(index) ??
+                            "Edit to add description",
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                    ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(viewModel.isEditing.toString()),
                   IconButton(
                       onPressed: () =>
                           viewModel.editDescription(index, context),
@@ -98,14 +129,14 @@ class CardView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                viewModel.getCardTitle(index),
+                viewModel.getCardTitle(currentIndex),
                 style: Theme.of(context)
                     .textTheme
                     .headline3!
                     .copyWith(color: Colors.black),
               ),
               Text(
-                viewModel.getCardDate(index),
+                viewModel.getCardDate(currentIndex),
                 style: Theme.of(context).textTheme.headline5!.copyWith(
                       color: Colors.grey,
                     ),

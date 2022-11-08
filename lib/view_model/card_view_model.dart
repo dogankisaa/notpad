@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -11,10 +12,14 @@ class CardViewModel extends BaseViewModel {
   TextEditingController descriptionController = TextEditingController();
   bool isEditing = false;
   final _title = Hive.box("todos");
+  List titleList = [];
+  List dateList = [];
+  String description = "";
   @override
   Future<void> init() async {
-    HomeViewModel vm = HomeViewModel();
-    print(vm.currentIndex);
+    titleList = _title.get("title") ?? [];
+    dateList = _title.get("date") ?? [];
+
     notifyListeners();
   }
 
@@ -35,27 +40,28 @@ class CardViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  showDescription(index, context) {
-    return isEditing
-        ? TextFormField(
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-                border: InputBorder.none, prefixText: _title.get(index)),
-            maxLines: null,
-            controller: descriptionController,
-            onTap: () => descriptionController.text == _title.get(index),
-            onEditingComplete: () {
-              isEditing = false;
-              notifyListeners();
-              _title.put(index, descriptionController.text);
-            },
-          )
-        : Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              _title.get(index) ?? "Edit to add description",
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          );
+  finishEditDescription() {
+    isEditing = false;
+    notifyListeners();
+  }
+
+  updateDescription(index) {
+    _title.put(index, descriptionController.text);
+    notifyListeners();
+  }
+
+  getDescription(index) {
+    return _title.get(index);
+  }
+
+  onEditComplete(index) {
+    isEditing = false;
+    notifyListeners();
+    finishEditDescription();
+    updateDescription(index);
+  }
+
+  routeToHome(BuildContext context) {
+    context.router.push(HomeView());
   }
 }

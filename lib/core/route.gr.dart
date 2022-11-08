@@ -36,7 +36,7 @@ class AppRouter extends _i3.RootStackRouter {
         routeData: routeData,
         child: _i2.CardView(
           key: args.key,
-          index: args.index,
+          currentIndex: args.index,
         ),
       );
     },
